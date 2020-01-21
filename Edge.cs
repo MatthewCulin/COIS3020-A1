@@ -11,6 +11,7 @@ namespace Culin_A1
         public Vertex<T> AdjVertex { get; set; }
         public int Cost { get; set; }
 
+        public string EdgeType { get; set; }
 
         /*-------------------------------------------------------
         |

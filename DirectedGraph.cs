@@ -4,12 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+        /*-----------------------------------------------
+        |                                               |
+        |                   ADDITIONS                   |
+        |                                               |
+        |   int timer = 0;                  (26)        |
+        |   bool cycle = false;             (27)        |
+        |                                               |
+        |   DepthFirstSearch(v)                         |
+        |       - timer++;                  (###)       |
+        |       - v.Colour = "GREY";        (###)       |
+        |       - v.DiscoveryTime = timer;  (###)       |
+        |       - v.Colour = "BLACK";       (###)       |
+        |       - v.FinishingTime = timer;  (###)       |
+        |                                               |
+        |----------------------------------------------*/
+
 namespace Culin_A1
 {
     class DirectedGraph<T> : IDirectedGraph<T>
     {
         public List<Vertex<T>> V;
 
+        int timer = 0;          // INITIALIZES THE TIMER
+        bool cycle = false;     // SET CYCLE TO FALSE; IF TRUE THERE IS A CYCLE IN THE GRAPH
 
         /*-------------------------------------------------------
         |
@@ -89,10 +107,10 @@ namespace Culin_A1
                 {
                     for (k = 0; k < V[j].E.Count; k++)
                     {
-                        if (V[j].E[k].AdjVertex.Name.Equals(name))   // Incident edge
+                        if (V[j].E[k].AdjVertex.Name.Equals(name))   // INCIDENT EDGE
                         {
                             V[j].E.RemoveAt(k);
-                            break;  // Since there are no duplicate edges
+                            break;                                  // SINCE THERE ARE NO DUPLICATE EDGES
                         }
                     } 
                 }
@@ -146,7 +164,9 @@ namespace Culin_A1
             int i, j;
 
             if ((i = FindVertex(name1)) > -1 && (j = V[i].FindEdge(name2)) > -1)
+            { 
                 V[i].E.RemoveAt(j);
+            }
         }// END OF REMOVE EDGE
 
 
@@ -164,15 +184,19 @@ namespace Culin_A1
         {
             int i;
 
-            for (i = 0; i < V.Count; i++)     // Set all vertices as unvisited
+            for (i = 0; i < V.Count; i++)   // SET ALL VERTICIES AS UNVISITED
+            { 
                 V[i].Visited = false;
+            }
 
             for (i = 0; i < V.Count; i++)
-                if (!V[i].Visited)                  // (Re)start with vertex i
+            {
+                if (!V[i].Visited)          // RESET WITH VERTEX I
                 {
                     DepthFirstSearch(V[i]);
                     Console.WriteLine();
                 }
+            }
         }// END OF DEPTH FIRST SEARCH
 
 
@@ -190,16 +214,61 @@ namespace Culin_A1
         {
             int j, k;
             Vertex<T> w;
+            timer++;                            // INCREMENT TIMER
 
-            v.Visited = true;    // Output vertex when marked as visited
-            Console.WriteLine(v.Name);
+            v.Visited = true;                   // MARK VERTEX AS VISITED
+            v.Colour = "GREY";                  // MARK VERTEX COLOUR AS GREY; INITIALIZED WHEN VERTEX CREATED
+            v.DiscoveryTime = timer;            // SET DISCOVERY TIME
 
-            for (j = 0; j < v.E.Count; j++)       // Visit next adjacent vertex
+            Console.WriteLine(v.Name);          // OUTPUT CURRENT VERTEX
+
+            for (j = 0; j < v.E.Count; j++)     // VISIT NEXT ADJACENT VERTEX
             {
-                w = v.E[j].AdjVertex;  // Find index of adjacent vertex in V
+                w = v.E[j].AdjVertex;           // FIND INDEX OF ADJACENT VERTEX IN V
                 if (!w.Visited)
-                    DepthFirstSearch(w);
+                {
+                    v.E[j].EdgeType = "TREE";   // SET EDGE TYPE TO TREE
+                    DepthFirstSearch(w);        // PERFORM A DEPTH FIRST SEARCH TO VERTEX W
+                    return;
+                }
+                else
+                {
+                    switch (w.Colour)
+                    {
+                        // SET CASE FOR THE UNLIKELY SITUATION AN UNVISITED VERTEX SLIPS THROUGH TO HERE
+                        // VERTEX W COLOUR IS WHITE
+                        case "WHITE":
+                            v.E[j].EdgeType = "TREE";   // SET CURRENT VERTEX EDGE TYPE TO TREE
+                            DepthFirstSearch(w);        // PERFORM A DEPTH FIRST SEARCH TO VERTEX W
+                            break;
+
+                        // VERTEX W COLOUR IS GREY
+                        case "GREY":
+                            v.E[j].EdgeType = "BACK";   // SET CURRENT VERTEX EDGE TYPE TO BACK
+                            cycle = true;               // SINCE THERE IS A BACK EDGE; GRAPH NOT ACYCLIC
+                            DepthFirstSearch(w);        // PERFORM DEPTH FIRST SEARCH TO VERTEX W
+                            break;
+
+                        // VERTEX W COLOUR IS BLACK
+                        case "BLACK":
+                            if (v.FinishingTime == 0)                   // CURRENT VERTEX HAS NOT FINISHED
+                                v.E[j].EdgeType = "FORWARD";            // SET CURRENT VERTEX EDGE TYPE TO FORWARD
+                            else if (w.FinishingTime > v.FinishingTime) // CURRENT VERTEX HAS A SMALLER FINISHING TIME THAN VERTEX W
+                                v.E[j].EdgeType = "CROSS";              // SET CURRENT VERTEX EDGE TO CROSS
+                            DepthFirstSearch(w);                        // PERFORM A DEPTH FIRST SEARCH ON VERTEX W
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                timer++;
+                break;
             }
+
+            v.Colour = "BLACK";             // SETS COLOUR OF THE VERTEX TO BLACK ONCE COMPLETED
+            v.FinishingTime = timer;        // SETS THE FINSIHING TIME
+
         }// END OF DEPTH FIRST SEARCH
 
 
@@ -218,11 +287,11 @@ namespace Culin_A1
             int i;
 
             for (i = 0; i < V.Count; i++)
-                V[i].Visited = false;              // Set all vertices as unvisited
+                V[i].Visited = false;              // SET ALL VERTICIES TO UNVISISTED
 
             for (i = 0; i < V.Count; i++)
             {
-                if (!V[i].Visited)                  // (Re)start with vertex i
+                if (!V[i].Visited)                  // RESTART WITH VERTEX I
                 {
                     BreadthFirstSearch(V[i]);
                     Console.WriteLine();
@@ -248,20 +317,20 @@ namespace Culin_A1
             Vertex<T> w;
             Queue<Vertex<T>> Q = new Queue<Vertex<T>>();
 
-            v.Visited = true;        // Mark vertex as visited when placed in the queue
-            Q.Enqueue(v);            // Why? 
+            v.Visited = true;                               // MARK VERTEX AS VISITED WHEN PLACED IN THE QUEUE
+            Q.Enqueue(v);            
 
             while (Q.Count != 0)
             {
-                v = Q.Dequeue();     // Output vertex when removed from the queue
+                v = Q.Dequeue();                            // OUTPUT VERTEX WHEN REMOVED FROM THE QUEUE
                 Console.WriteLine(v.Name);
 
-                for (j = 0; j < v.E.Count; j++)    // Enqueue unvisited adjacent vertices
+                for (j = 0; j < v.E.Count; j++)             // ENQUEUE UNIVISITED ADJACENT VERTICIES
                 {
                     w = v.E[j].AdjVertex;
                     if (!w.Visited)
                     {
-                        w.Visited = true;          // Mark vertex as visited
+                        w.Visited = true;                   // MARK VERTEX AS VISISTED
                         Q.Enqueue(w);
                     }
                 }
@@ -284,6 +353,7 @@ namespace Culin_A1
             {
                 Console.WriteLine(V[i].Name);
             }
+
             Console.ReadLine();
         }// END OF PRINT VERTICIES
 
