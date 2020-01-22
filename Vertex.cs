@@ -36,8 +36,6 @@ namespace Culin_A1
 
         public int InDegree { get; set; }       // NUMBER OF VERTEICIES THAT HAVE A REFERENCE TO THE VERTEX
 
-        public string EdgeType { get; set; }    // DETERMINES THE EDGE TYPE
-
         /*-------------------------------------------------------
         |
         |       Name: Vertex

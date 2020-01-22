@@ -10,63 +10,320 @@ namespace Culin_A1
     {
         static void Main(string[] args)
         {
-            int i, j;
+            DirectedGraph<string> s = new DirectedGraph<string>();
+            DirectedGraph<char> c = new DirectedGraph<char>();
+            DirectedGraph<int> i = new DirectedGraph<int>();
 
-            Console.WriteLine("Adjacency Matrix Implementation");
+            bool done = false;
 
-            DirectedGraph<char> H = new DirectedGraph<char>();
+            int graph_type;
+            int user_choice;
 
-            for (i = 0; i < 7; i++)
+            Console.WriteLine("\n SELECT A TYPE OF GRAPH...");
+            Console.WriteLine("Locations (String) --> 1");
+            Console.WriteLine("Labels (Letters)   --> 2");
+            Console.WriteLine("Labels (Numbers)   --> 3");
+            graph_type = Convert.ToInt32(Console.ReadLine());
+
+            if(graph_type < 0 || graph_type > 3)
             {
-                H.AddVertex((char)(i + 'a'));
+                Console.WriteLine("INVALID OPTION...");
+                return;
             }
 
-
-            H.PrintVertices();
-
-            for (i = 0; i < 7; i += 2)
+            while (!done)
             {
-                for (j = 0; j < 7; j += 3)
+                Console.WriteLine("\n SELECT AN OPTION...");
+                Console.WriteLine("Add Vertex    --> 1");
+                Console.WriteLine("Remove Vertex --> 2");
+                Console.WriteLine("Add Edge      --> 3");
+                Console.WriteLine("Remove Edge   --> 4");
+                Console.WriteLine("Finish Graph  --> 5");
+                user_choice = Convert.ToInt32(Console.ReadLine());
+
+                if (user_choice < 0 || user_choice > 5)
                 {
-                    H.AddEdge((char)(i + 'a'), (char)(j + 'a'), 10);
+                    Console.WriteLine("INVALID OPTION...");
+                    return;
+                }
+
+                switch (user_choice)
+                {
+                    case 1:
+                        AddVertex(graph_type, s, c, i);
+                        break;
+
+                    case 2:
+                        RemoveVertex(graph_type, s, c, i);
+                        break;
+
+                    case 3:
+                        AddEdge(graph_type, s, c, i);
+                        break;
+
+                    case 4:
+                        RemoveEdge(graph_type, s, c, i);
+                        break;
+
+                    case 5:
+                        done = true;
+                        break;
                 }
             }
 
-            H.PrintEdges();
-            Console.ReadKey();
+            switch(graph_type)
+            {
+                case 1:
+                    s.PrintEdges();
+                    s.PrintVertices();
+                    Console.ReadKey();
 
-            H.RemoveVertex('c');
-            H.RemoveVertex('f');
+                    s.DepthFirstSearch();
+                    Console.ReadKey();
 
-            H.PrintVertices();
-            H.PrintEdges();
-            Console.ReadKey();
+                    s.BreadthFirstSearch();
+                    Console.ReadKey();
+                    break;
+                
+                case 2:
+                    c.PrintEdges();
+                    c.PrintVertices();
+                    Console.ReadKey();
 
-            DirectedGraph<int> G = new DirectedGraph<int>();
+                    c.DepthFirstSearch();
+                    Console.ReadKey();
 
-            for (i = 0; i < 7; i++)
-            { 
-                G.AddVertex(i); 
+                    c.BreadthFirstSearch();
+                    Console.ReadKey();
+                    break;
+
+                case 3:
+                    i.PrintEdges();
+                    i.PrintVertices();
+                    Console.ReadKey();
+
+                    i.DepthFirstSearch();
+                    Console.ReadKey();
+
+                    i.BreadthFirstSearch();
+                    Console.ReadKey();
+                    break;
             }
 
-            G.PrintVertices();
+        }// END OF MAIN
 
-            G.AddEdge(0, 1, 0);
-            G.AddEdge(1, 3, 0);
-            G.AddEdge(1, 4, 0);
-            G.AddEdge(3, 2, 0);
-            G.AddEdge(4, 5, 0);
-            G.AddEdge(2, 5, 0);
-            G.AddEdge(5, 6, 0);
 
-            G.PrintEdges();
-            Console.ReadKey();
+        /*-------------------------------------------------------
+        |
+        |       Name: AddVertex
+        |
+        |       Purpose: Add a vertex to a graph
+        |
+        |       Parameters: - int graph_type
+        |                   - DirectedGraph(s)
+        |                       - string
+        |                       - char
+        |                       - int
+        |
+        --------------------------------------------------------*/
+        static void AddVertex(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
+        {
+            string s_vertex_name;
+            char c_vertex_name;
+            int i_vertex_name;
+            
+            Console.WriteLine("ADDING VERTEX...");
+            Console.WriteLine("Vertex Name ->");
+            s_vertex_name = Console.ReadLine();
+            
+            // DETERMINE WHAT TYPE OF GRAPH TO ADD VERTEX TO
+            switch (graph_type)
+            {
+                case 1:
+                    s.AddVertex(s_vertex_name);
+                    break;
 
-            G.DepthFirstSearch();
-            Console.ReadKey();
+                case 2:
+                    c_vertex_name = Convert.ToChar(s_vertex_name);
+                    c.AddVertex(c_vertex_name);
+                    break;
 
-            G.BreadthFirstSearch();
-            Console.ReadKey();
-        }
+                case 3:
+                    i_vertex_name = Convert.ToInt32(s_vertex_name);
+                    i.AddVertex(i_vertex_name);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }// END OF ADD VERTEX
+
+
+        /*-------------------------------------------------------
+        |
+        |       Name: RemoveVertex
+        |
+        |       Purpose: Remove a vertex from a graph
+        |
+        |       Parameters: - int graph_type
+        |                   - DirectedGraph(s)
+        |                       - string
+        |                       - char
+        |                       - int
+        |
+        --------------------------------------------------------*/
+        static void RemoveVertex(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
+        {
+            string s_vertex_name;
+            char c_vertex_name;
+            int i_vertex_name;
+
+            Console.WriteLine("REMOVING VERTEX...");
+            Console.WriteLine("Vertex Name ->");
+            s_vertex_name = Console.ReadLine();
+
+            // DETERMINE WHAT TYPE OF GRAPH TO REMOVE VERTEX FROM
+            switch(graph_type)
+            {
+                case 1:
+                    s.RemoveVertex(s_vertex_name);
+                    break;
+
+                case 2:
+                    c_vertex_name = Convert.ToChar(s_vertex_name);
+                    c.RemoveVertex(c_vertex_name);
+                    break;
+
+                case 3:
+                    i_vertex_name = Convert.ToInt32(s_vertex_name);
+                    i.AddVertex(i_vertex_name);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }//END OF REMOVE VERTEX
+
+
+        /*-------------------------------------------------------
+        |
+        |       Name: AddEdge
+        |
+        |       Purpose: Add an edge to a graph
+        |
+        |       Parameters: - int graph_type
+        |                   - DirectedGraph(s)
+        |                       - string
+        |                       - char
+        |                       - int
+        |
+        --------------------------------------------------------*/
+        static void AddEdge(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
+        {
+            int cost;
+
+            string s_start_name;
+            string s_end_name;
+
+            char c_start_name;
+            char c_end_name;
+
+            int i_start_name;
+            int i_end_name;
+
+            Console.WriteLine("ADDING EDGE...");
+            Console.WriteLine("Starting Vertex ->");
+            s_start_name = Console.ReadLine();
+
+            Console.WriteLine("Ending Vertex ->");
+            s_end_name = Console.ReadLine();
+
+            Console.WriteLine("Cost ->");
+            cost = Convert.ToInt32(Console.ReadLine());
+
+            // DETERMINE WHAT TYPE OF GRAPH TO ADD EDGE TO
+            switch (graph_type)
+            {
+                case 1:
+                    s.AddEdge(s_start_name, s_end_name, cost);
+                    break;
+
+                case 2:
+                    c_start_name = Convert.ToChar(s_start_name);
+                    c_end_name = Convert.ToChar(s_end_name);
+                    c.AddEdge(c_start_name, c_end_name, cost);
+                    break;
+
+                case 3:
+                    i_start_name = Convert.ToChar(s_start_name);
+                    i_end_name = Convert.ToChar(s_end_name);
+                    i.AddEdge(i_start_name, i_end_name, cost);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }// END OF ADD EDGE
+
+
+        /*-------------------------------------------------------
+        |
+        |       Name: RemoveEdge
+        |
+        |       Purpose: Remove an edge from a graph
+        |
+        |       Parameters: - int graph_type
+        |                   - DirectedGraph(s)
+        |                       - string
+        |                       - char
+        |                       - int
+        |
+        --------------------------------------------------------*/
+        static void RemoveEdge(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
+        {
+            string s_start_name;
+            string s_end_name;
+
+            char c_start_name;
+            char c_end_name;
+
+            int i_start_name;
+            int i_end_name;
+
+            Console.WriteLine("REMOVING EDGE...");
+            Console.WriteLine("Starting Vertex ->");
+            s_start_name = Console.ReadLine();
+
+            Console.WriteLine("Ending Vertex ->");
+            s_end_name = Console.ReadLine();
+
+            // DETERMINE WHAT TYPE OF GRAPH TO REMOVE EDGE FROM
+            switch (graph_type)
+            {
+                case 1:
+                    s.RemoveEdge(s_start_name, s_end_name);
+                    break;
+
+                case 2:
+                    c_start_name = Convert.ToChar(s_start_name);
+                    c_end_name = Convert.ToChar(s_end_name);
+                    c.RemoveEdge(c_start_name, c_end_name);
+                    break;
+
+                case 3:
+                    i_start_name = Convert.ToChar(s_start_name);
+                    i_end_name = Convert.ToChar(s_end_name);
+                    i.RemoveEdge(i_start_name, i_end_name);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }// END OF REMOVE EDGE
+
     }
 }

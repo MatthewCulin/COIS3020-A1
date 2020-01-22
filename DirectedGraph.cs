@@ -4,21 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-        /*-----------------------------------------------
-        |                                               |
-        |                   ADDITIONS                   |
-        |                                               |
-        |   int timer = 0;                  (26)        |
-        |   bool cycle = false;             (27)        |
-        |                                               |
-        |   DepthFirstSearch(v)                         |
-        |       - timer++;                  (###)       |
-        |       - v.Colour = "GREY";        (###)       |
-        |       - v.DiscoveryTime = timer;  (###)       |
-        |       - v.Colour = "BLACK";       (###)       |
-        |       - v.FinishingTime = timer;  (###)       |
-        |                                               |
-        |----------------------------------------------*/
+        /*----------------------------------------------------------------------------------
+        |                                                                                   |
+        |                                           ADDITIONS                               |
+        |   Global Declarations                                                             |
+        |       - int timer = 0;                                                            |
+        |       - bool cycle = false;                                                       |
+        |                                                                                   |
+        |   RemoveVertex(name)                                                              |
+        |       - For loop to remove all edges from deleted vertex                          |
+        |         (calls RemoveEdge( ) to ensure the InDegree for each is decremented)      |
+        |                                                                                   |
+        |   AddEdge(name, name, cost)                                                       |
+        |       - Increment InDegree for destination Vertex                                 |
+        |                                                                                   |
+        |   RemoveEdge(name, name)                                                          |
+        |       - Decrements InDegree for destination Vertex                                |
+        |                                                                                   |
+        |   DepthFirstSearch(v)                                                             |
+        |       - Updates vertex colour based on the traversal                              |
+        |         (set to white in Vertex class)                                            |
+        |       - Sets discovery time and finsihing time based of timer incrementor         |
+        |       - Updates branch type based on traversal                                    |
+        |         (Sets cycle boolean to true if there is a back edge)                      |
+        |                                                                                   |
+        |----------------------------------------------------------------------------------*/
 
 namespace Culin_A1
 {
@@ -100,9 +110,12 @@ namespace Culin_A1
         public void RemoveVertex(T name)
         {
             int i, j, k;
+            int edgeCount;
 
             if ((i = FindVertex(name)) > -1)
             {
+                edgeCount = V[i].E.Count;
+
                 for (j = 0; j < V.Count; j++)
                 {
                     for (k = 0; k < V[j].E.Count; k++)
@@ -113,6 +126,11 @@ namespace Culin_A1
                             break;                                  // SINCE THERE ARE NO DUPLICATE EDGES
                         }
                     } 
+                }
+
+                for (j = edgeCount - 1; j > 0; j--)
+                {
+                    RemoveEdge(V[i].Name, V[i].E[j].AdjVertex.Name); 
                 }
 
                 V.RemoveAt(i);
@@ -139,10 +157,12 @@ namespace Culin_A1
 
             if ((i = FindVertex(name1)) > -1 && (j = FindVertex(name2)) > -1)
             {
+
                 if (V[i].FindEdge(name2) == -1)
                 {
                     e = new Edge<T>(V[j], cost);
                     V[i].E.Add(e);
+                    V[j].InDegree++;
                 }
             }
         }// END OF ADD EDGE
@@ -161,11 +181,14 @@ namespace Culin_A1
         --------------------------------------------------------*/
         public void RemoveEdge(T name1, T name2)
         {
-            int i, j;
+            int i, j, k;
 
             if ((i = FindVertex(name1)) > -1 && (j = V[i].FindEdge(name2)) > -1)
-            { 
+            {
+                k = FindVertex(name2);
+
                 V[i].E.RemoveAt(j);
+                V[k].InDegree--;
             }
         }// END OF REMOVE EDGE
 
@@ -194,6 +217,7 @@ namespace Culin_A1
                 if (!V[i].Visited)          // RESET WITH VERTEX I
                 {
                     DepthFirstSearch(V[i]);
+                    timer--;
                     Console.WriteLine();
                 }
             }
@@ -212,9 +236,9 @@ namespace Culin_A1
         --------------------------------------------------------*/
         private void DepthFirstSearch(Vertex<T> v)
         {
-            int j, k;
+            int j;
             Vertex<T> w;
-            timer++;                            // INCREMENT TIMER
+            timer++;                            // INCREMENT TIMER (DISCOVERY TIME)
 
             v.Visited = true;                   // MARK VERTEX AS VISITED
             v.Colour = "GREY";                  // MARK VERTEX COLOUR AS GREY; INITIALIZED WHEN VERTEX CREATED
@@ -244,30 +268,28 @@ namespace Culin_A1
 
                         // VERTEX W COLOUR IS GREY
                         case "GREY":
-                            v.E[j].EdgeType = "BACK";   // SET CURRENT VERTEX EDGE TYPE TO BACK
+                            v.E[j].EdgeType = "BACK ";  // SET CURRENT VERTEX EDGE TYPE TO BACK
                             cycle = true;               // SINCE THERE IS A BACK EDGE; GRAPH NOT ACYCLIC
-                            DepthFirstSearch(w);        // PERFORM DEPTH FIRST SEARCH TO VERTEX W
                             break;
 
                         // VERTEX W COLOUR IS BLACK
                         case "BLACK":
-                            if (v.FinishingTime == 0)                   // CURRENT VERTEX HAS NOT FINISHED
+                            if (v.DiscoveryTime < w.DiscoveryTime)      // CURRENT VERTEX HAS NOT FINISHED
                                 v.E[j].EdgeType = "FORWARD";            // SET CURRENT VERTEX EDGE TYPE TO FORWARD
-                            else if (w.FinishingTime > v.FinishingTime) // CURRENT VERTEX HAS A SMALLER FINISHING TIME THAN VERTEX W
-                                v.E[j].EdgeType = "CROSS";              // SET CURRENT VERTEX EDGE TO CROSS
-                            DepthFirstSearch(w);                        // PERFORM A DEPTH FIRST SEARCH ON VERTEX W
+                            else if (v.DiscoveryTime > w.DiscoveryTime) // CURRENT VERTEX HAS A SMALLER FINISHING TIME THAN VERTEX W
+                                v.E[j].EdgeType = "CROSS";              // SET CURRENT VERTEX EDGE TO CROSS                                  
                             break;
 
                         default:
                             break;
                     }
                 }
-                timer++;
-                break;
+
             }
 
-            v.Colour = "BLACK";             // SETS COLOUR OF THE VERTEX TO BLACK ONCE COMPLETED
-            v.FinishingTime = timer;        // SETS THE FINSIHING TIME
+            timer++;                            // INCREMENT TIMER (FINSIHING TIME)
+            v.Colour = "BLACK";                 // SETS COLOUR OF THE VERTEX TO BLACK ONCE COMPLETED     
+            v.FinishingTime = timer;            // SETS THE FINSIHING TIME
 
         }// END OF DEPTH FIRST SEARCH
 
