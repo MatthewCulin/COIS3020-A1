@@ -35,9 +35,11 @@ namespace Culin_A1
     class DirectedGraph<T> : IDirectedGraph<T>
     {
         public List<Vertex<T>> V;
+        public List<Vertex<T>> first;
+        public List<Vertex<T>> second;
 
         int timer = 0;          // INITIALIZES THE TIMER
-        bool cycle = false;     // SET CYCLE TO FALSE; IF TRUE THERE IS A CYCLE IN THE GRAPH
+        bool cycle = false;     // SET CYCLE TO FALSE; TRUE IF THERE IS A CYCLE IN THE GRAPH
 
         /*-------------------------------------------------------
         |
@@ -205,7 +207,7 @@ namespace Culin_A1
         --------------------------------------------------------*/
         public void DepthFirstSearch()
         {
-            int i;
+            int i, j;
 
             for (i = 0; i < V.Count; i++)   // SET ALL VERTICIES AS UNVISITED
             { 
@@ -217,7 +219,6 @@ namespace Culin_A1
                 if (!V[i].Visited)          // RESET WITH VERTEX I
                 {
                     DepthFirstSearch(V[i]);
-                    timer--;
                     Console.WriteLine();
                 }
             }
@@ -253,7 +254,6 @@ namespace Culin_A1
                 {
                     v.E[j].EdgeType = "TREE";   // SET EDGE TYPE TO TREE
                     DepthFirstSearch(w);        // PERFORM A DEPTH FIRST SEARCH TO VERTEX W
-                    return;
                 }
                 else
                 {
@@ -277,7 +277,7 @@ namespace Culin_A1
                             if (v.DiscoveryTime < w.DiscoveryTime)      // CURRENT VERTEX HAS NOT FINISHED
                                 v.E[j].EdgeType = "FORWARD";            // SET CURRENT VERTEX EDGE TYPE TO FORWARD
                             else if (v.DiscoveryTime > w.DiscoveryTime) // CURRENT VERTEX HAS A SMALLER FINISHING TIME THAN VERTEX W
-                                v.E[j].EdgeType = "CROSS";              // SET CURRENT VERTEX EDGE TO CROSS                                  
+                                v.E[j].EdgeType = "CROSS";              // SET CURRENT VERTEX EDGE TO CROSS 
                             break;
 
                         default:
@@ -290,6 +290,8 @@ namespace Culin_A1
             timer++;                            // INCREMENT TIMER (FINSIHING TIME)
             v.Colour = "BLACK";                 // SETS COLOUR OF THE VERTEX TO BLACK ONCE COMPLETED     
             v.FinishingTime = timer;            // SETS THE FINSIHING TIME
+            
+            //first.Insert(0, v);                 // ADD VERTEX TO THE FRONT OF THE FIRST LIST 
 
         }// END OF DEPTH FIRST SEARCH
 
@@ -401,6 +403,30 @@ namespace Culin_A1
                 }
             }
                 
+            Console.ReadLine();
+        }// END OF PRINT EDGES
+
+
+        /*-------------------------------------------------------
+        |
+        |       Name: PrintTopological
+        |
+        |       Purpose: Prints the graph in topological order
+        |
+        |       Parameters: 
+        |
+        --------------------------------------------------------*/
+        public void PrintTopological()
+        {
+            int i;
+            for (i = 0; i < first.Count; i++)
+                Console.WriteLine("Method 1: " + first[i]);
+
+            Console.WriteLine();
+
+            for (i = 0; i < second.Count; i++)
+                Console.WriteLine("Method 2: " + second[i]);
+
             Console.ReadLine();
         }// END OF PRINT EDGES
 

@@ -18,97 +18,135 @@ namespace Culin_A1
 
             int graph_type;
             int user_choice;
-
-            Console.WriteLine("\n SELECT A TYPE OF GRAPH...");
-            Console.WriteLine("Locations (String) --> 1");
-            Console.WriteLine("Labels (Letters)   --> 2");
-            Console.WriteLine("Labels (Numbers)   --> 3");
-            graph_type = Convert.ToInt32(Console.ReadLine());
-
-            if(graph_type < 0 || graph_type > 3)
+            int j, k;
+            
+            try
             {
-                Console.WriteLine("INVALID OPTION...");
-                return;
-            }
+                Console.WriteLine("\n SELECT A TYPE OF GRAPH...");
+                Console.WriteLine("Locations (String) --> 1");
+                Console.WriteLine("Labels (Letters)   --> 2");
+                Console.Write("Labels (Numbers)   --> 3\n --> ");
+                graph_type = Convert.ToInt32(Console.ReadLine());
 
-            while (!done)
-            {
-                Console.WriteLine("\n SELECT AN OPTION...");
-                Console.WriteLine("Add Vertex    --> 1");
-                Console.WriteLine("Remove Vertex --> 2");
-                Console.WriteLine("Add Edge      --> 3");
-                Console.WriteLine("Remove Edge   --> 4");
-                Console.WriteLine("Finish Graph  --> 5");
-                user_choice = Convert.ToInt32(Console.ReadLine());
-
-                if (user_choice < 0 || user_choice > 5)
+                if (graph_type < 0 || graph_type > 3)
                 {
                     Console.WriteLine("INVALID OPTION...");
                     return;
                 }
 
-                switch (user_choice)
+                while (!done)
+                {
+                    try
+                    {
+                        Console.WriteLine("\n SELECT AN OPTION...");
+                        Console.WriteLine("Add Vertex    --> 1");
+                        Console.WriteLine("Remove Vertex --> 2");
+                        Console.WriteLine("Add Edge      --> 3");
+                        Console.WriteLine("Remove Edge   --> 4");
+                        Console.Write("Finish Graph  --> 5\n --> ");
+                        user_choice = Convert.ToInt32(Console.ReadLine());
+
+                        if (user_choice < 0 || user_choice > 5)
+                        {
+                            Console.WriteLine("INVALID OPTION...");
+                            return;
+                        }
+
+                        switch (user_choice)
+                        {
+                            case 1:
+                                AddVertex(graph_type, s, c, i);
+                                break;
+
+                            case 2:
+                                RemoveVertex(graph_type, s, c, i);
+                                break;
+
+                            case 3:
+                                AddEdge(graph_type, s, c, i);
+                                break;
+
+                            case 4:
+                                RemoveEdge(graph_type, s, c, i);
+                                break;
+
+                            case 5:
+                                done = true;
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("\n\nERROR PROCESSING SELECTION\n\n");
+                    }
+
+                }
+
+                switch (graph_type)
                 {
                     case 1:
-                        AddVertex(graph_type, s, c, i);
+                        Console.WriteLine("\nDEPTH FIRST SEARCH");
+                        s.DepthFirstSearch();
+                        Console.ReadKey();
+
+                        Console.WriteLine("BREADTH FIRST SEARCH");
+                        s.BreadthFirstSearch();
+                        Console.ReadKey();
+
+                        Console.WriteLine("\nVERTEX INFO");
+                        for (j = 0; j < s.V.Count; j++)
+                        {
+                            Console.WriteLine(s.V[j].VertexInfo);
+                            Console.WriteLine("\tEDGE INFO");
+                            for (k = 0; k < s.V[j].E.Count(); k++)
+                                Console.WriteLine(s.V[j].E[k].EdgeType);
+                        }
                         break;
 
                     case 2:
-                        RemoveVertex(graph_type, s, c, i);
+                        Console.WriteLine("\nDEPTH FIRST SEARCH");
+                        c.DepthFirstSearch();
+                        Console.ReadKey();
+
+                        Console.WriteLine("BREADTH FIRST SEARCH");
+                        c.BreadthFirstSearch();
+                        Console.ReadKey();
+
+                        Console.WriteLine("\nVERTEX INFO");
+                        for (j = 0; j < c.V.Count; j++)
+                        {
+                            Console.WriteLine(c.V[j].VertexInfo);
+                            Console.WriteLine("\tEDGE INFO");
+                            for (k = 0; k < c.V[j].E.Count(); k++)
+                                Console.WriteLine(c.V[j].E[k].EdgeType);
+                        }
                         break;
 
                     case 3:
-                        AddEdge(graph_type, s, c, i);
-                        break;
+                        Console.WriteLine("\nDEPTH FIRST SEARCH");
+                        i.DepthFirstSearch();
+                        Console.ReadKey();
 
-                    case 4:
-                        RemoveEdge(graph_type, s, c, i);
-                        break;
+                        Console.WriteLine("BREADTH FIRST SEARCH");
+                        i.BreadthFirstSearch();
+                        Console.ReadKey();
 
-                    case 5:
-                        done = true;
+                        Console.WriteLine("\nVERTEX INFO");
+                        for (j = 0; j < i.V.Count; j++)
+                        {
+                            Console.WriteLine(i.V[j].VertexInfo);
+                            Console.WriteLine("\tEDGE INFO");
+                            for (k = 0; k < i.V[j].E.Count(); j++)
+                                Console.WriteLine(i.V[j].E[k].EdgeType);
+                        }
                         break;
                 }
             }
-
-            switch(graph_type)
+            catch(Exception e)
             {
-                case 1:
-                    s.PrintEdges();
-                    s.PrintVertices();
-                    Console.ReadKey();
-
-                    s.DepthFirstSearch();
-                    Console.ReadKey();
-
-                    s.BreadthFirstSearch();
-                    Console.ReadKey();
-                    break;
-                
-                case 2:
-                    c.PrintEdges();
-                    c.PrintVertices();
-                    Console.ReadKey();
-
-                    c.DepthFirstSearch();
-                    Console.ReadKey();
-
-                    c.BreadthFirstSearch();
-                    Console.ReadKey();
-                    break;
-
-                case 3:
-                    i.PrintEdges();
-                    i.PrintVertices();
-                    Console.ReadKey();
-
-                    i.DepthFirstSearch();
-                    Console.ReadKey();
-
-                    i.BreadthFirstSearch();
-                    Console.ReadKey();
-                    break;
+                Console.WriteLine("\n\nERROR PROCESSING SELECTION\n\n");
             }
+            
 
         }// END OF MAIN
 
@@ -128,33 +166,70 @@ namespace Culin_A1
         --------------------------------------------------------*/
         static void AddVertex(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
         {
-            string s_vertex_name;
-            char c_vertex_name;
-            int i_vertex_name;
+            bool done = false;
+            char extend;
+            int j;
+            string input;
+            string[] s_vertex_name;
             
-            Console.WriteLine("ADDING VERTEX...");
-            Console.WriteLine("Vertex Name ->");
-            s_vertex_name = Console.ReadLine();
-            
-            // DETERMINE WHAT TYPE OF GRAPH TO ADD VERTEX TO
-            switch (graph_type)
+            while(!done)
             {
-                case 1:
-                    s.AddVertex(s_vertex_name);
-                    break;
+                try
+                {
+                    Console.WriteLine("\n ADDING VERTEX...");
+                    Console.Write("Vertex Names (Separated by a space) --> ");
+                    input = Console.ReadLine();
+                    s_vertex_name = input.Split(' ');
 
-                case 2:
-                    c_vertex_name = Convert.ToChar(s_vertex_name);
-                    c.AddVertex(c_vertex_name);
-                    break;
+                    char[] c_vertex_name = new char[s_vertex_name.Count()];
+                    int[] i_vertex_name = new int[s_vertex_name.Count()];
 
-                case 3:
-                    i_vertex_name = Convert.ToInt32(s_vertex_name);
-                    i.AddVertex(i_vertex_name);
-                    break;
+                    // DETERMINE WHAT TYPE OF GRAPH TO ADD VERTEX TO
+                    switch (graph_type)
+                    {
+                        case 1:
+                            foreach (string element in s_vertex_name)
+                                s.AddVertex(element);
+                            break;
 
-                default:
-                    break;
+                        case 2:
+                            for (j = 0; j < s_vertex_name.Count(); j++)
+                                c_vertex_name[j] = Convert.ToChar(s_vertex_name[j]);
+                            foreach (char element in c_vertex_name)
+                                c.AddVertex(element);
+                            break;
+
+                        case 3:
+                            for (j = 0; j < s_vertex_name.Count(); j++)
+                                i_vertex_name[j] = Convert.ToChar(s_vertex_name[j]);
+                            foreach (char element in i_vertex_name)
+                                i.AddVertex(element);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    try
+                    {
+                        Console.Write("\n CONTINUE? (Y/N) --> ");
+                        extend = Convert.ToChar(Console.ReadLine());
+
+                        if (extend == 'y' || extend == 'Y')
+                            done = false;
+                        else
+                            done = true;
+                    }
+                    catch(Exception ex)
+                    {
+                        done = true;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("\n\nERROR ADDING VERTEX\n\n");
+                }                
             }
 
         }// END OF ADD VERTEX
@@ -175,33 +250,55 @@ namespace Culin_A1
         --------------------------------------------------------*/
         static void RemoveVertex(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
         {
+            bool done = false;
+            char extend;
             string s_vertex_name;
-            char c_vertex_name;
-            int i_vertex_name;
 
-            Console.WriteLine("REMOVING VERTEX...");
-            Console.WriteLine("Vertex Name ->");
-            s_vertex_name = Console.ReadLine();
-
-            // DETERMINE WHAT TYPE OF GRAPH TO REMOVE VERTEX FROM
-            switch(graph_type)
+            while(!done)
             {
-                case 1:
-                    s.RemoveVertex(s_vertex_name);
-                    break;
+                try
+                {
+                    Console.WriteLine("\n REMOVING VERTEX...");
+                    Console.Write("Vertex Name --> ");
+                    s_vertex_name = Console.ReadLine();
 
-                case 2:
-                    c_vertex_name = Convert.ToChar(s_vertex_name);
-                    c.RemoveVertex(c_vertex_name);
-                    break;
+                    // DETERMINE WHAT TYPE OF GRAPH TO REMOVE VERTEX FROM
+                    switch (graph_type)
+                    {
+                        case 1:
+                            s.RemoveVertex(s_vertex_name);
+                            break;
 
-                case 3:
-                    i_vertex_name = Convert.ToInt32(s_vertex_name);
-                    i.AddVertex(i_vertex_name);
-                    break;
+                        case 2:
+                            c.RemoveVertex(Convert.ToChar(s_vertex_name));
+                            break;
 
-                default:
-                    break;
+                        case 3:
+                            i.AddVertex(Convert.ToInt32(s_vertex_name));
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    try
+                    {
+                        Console.Write("\n CONTINUE? (Y/N) -->");
+                        extend = Convert.ToChar(Console.ReadLine());
+                        if (extend == 'y' || extend == 'Y')
+                            done = false;
+                        else
+                            done = true;
+                    }
+                    catch(Exception e)
+                    {
+                        done = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("\n\nERROR REMOVING VERTEX\n\n");
+                }
             }
 
         }//END OF REMOVE VERTEX
@@ -222,49 +319,62 @@ namespace Culin_A1
         --------------------------------------------------------*/
         static void AddEdge(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
         {
+            bool done = false;
+            char extend;
             int cost;
+            string inputs;
+            string[] input_arr;
 
-            string s_start_name;
-            string s_end_name;
-
-            char c_start_name;
-            char c_end_name;
-
-            int i_start_name;
-            int i_end_name;
-
-            Console.WriteLine("ADDING EDGE...");
-            Console.WriteLine("Starting Vertex ->");
-            s_start_name = Console.ReadLine();
-
-            Console.WriteLine("Ending Vertex ->");
-            s_end_name = Console.ReadLine();
-
-            Console.WriteLine("Cost ->");
-            cost = Convert.ToInt32(Console.ReadLine());
-
-            // DETERMINE WHAT TYPE OF GRAPH TO ADD EDGE TO
-            switch (graph_type)
+            while(!done)
             {
-                case 1:
-                    s.AddEdge(s_start_name, s_end_name, cost);
-                    break;
+                try
+                {
+                    Console.WriteLine("\n ADDING EDGE...");
+                    Console.Write(" Enter in following format: Start Finish Cost --> ");
+                    inputs = Console.ReadLine();
+                    input_arr = inputs.Split(' ');
+                    cost = Convert.ToInt32(input_arr[2]);
 
-                case 2:
-                    c_start_name = Convert.ToChar(s_start_name);
-                    c_end_name = Convert.ToChar(s_end_name);
-                    c.AddEdge(c_start_name, c_end_name, cost);
-                    break;
+                    // DETERMINE WHAT TYPE OF GRAPH TO ADD EDGE TO
+                    switch (graph_type)
+                    {
+                        case 1:
+                            s.AddEdge(input_arr[0], input_arr[1], cost);
+                            break;
 
-                case 3:
-                    i_start_name = Convert.ToChar(s_start_name);
-                    i_end_name = Convert.ToChar(s_end_name);
-                    i.AddEdge(i_start_name, i_end_name, cost);
-                    break;
+                        case 2:
+                            c.AddEdge(Convert.ToChar(input_arr[0]), Convert.ToChar(input_arr[1]), cost);
+                            break;
 
-                default:
-                    break;
+                        case 3:
+                            i.AddEdge(Convert.ToInt32(input_arr[0]), Convert.ToInt32(input_arr[1]), cost);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    try
+                    {
+                        Console.Write("\n CONTINUE? (Y/N) --> ");
+                        extend = Convert.ToChar(Console.ReadLine());
+
+                        if (extend == 'y' || extend == 'Y')
+                            done = false;
+                        else
+                            done = true;
+                    }
+                    catch(Exception ex)
+                    {
+                        done = true;
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("\n\nERROR ADDING EDGE\n\n");
+                }
             }
+                     
 
         }// END OF ADD EDGE
 
@@ -284,45 +394,60 @@ namespace Culin_A1
         --------------------------------------------------------*/
         static void RemoveEdge(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
         {
-            string s_start_name;
-            string s_end_name;
+            bool done = false;
+            char extend;
+            string inputs;
+            string[] input_arr;
 
-            char c_start_name;
-            char c_end_name;
-
-            int i_start_name;
-            int i_end_name;
-
-            Console.WriteLine("REMOVING EDGE...");
-            Console.WriteLine("Starting Vertex ->");
-            s_start_name = Console.ReadLine();
-
-            Console.WriteLine("Ending Vertex ->");
-            s_end_name = Console.ReadLine();
-
-            // DETERMINE WHAT TYPE OF GRAPH TO REMOVE EDGE FROM
-            switch (graph_type)
+            while (!done)
             {
-                case 1:
-                    s.RemoveEdge(s_start_name, s_end_name);
-                    break;
+                try
+                {
+                    Console.WriteLine("\n REMOVING EDGE...");
+                    Console.Write(" Enter in following format: Start Finish --> ");
+                    inputs = Console.ReadLine();
+                    input_arr = inputs.Split(' ');
 
-                case 2:
-                    c_start_name = Convert.ToChar(s_start_name);
-                    c_end_name = Convert.ToChar(s_end_name);
-                    c.RemoveEdge(c_start_name, c_end_name);
-                    break;
+                    // DETERMINE WHAT TYPE OF GRAPH TO REMOVE EDGE FROM
+                    switch (graph_type)
+                    {
+                        case 1:
+                            s.RemoveEdge(input_arr[0], input_arr[1]);
+                            break;
 
-                case 3:
-                    i_start_name = Convert.ToChar(s_start_name);
-                    i_end_name = Convert.ToChar(s_end_name);
-                    i.RemoveEdge(i_start_name, i_end_name);
-                    break;
+                        case 2:
+                            c.RemoveEdge(Convert.ToChar(input_arr[0]), Convert.ToChar(input_arr[1]));
+                            break;
 
-                default:
-                    break;
+                        case 3:
+                            i.RemoveEdge(Convert.ToInt32(input_arr[0]), Convert.ToInt32(input_arr[1]));
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    try
+                    {
+                        Console.Write("\n CONTINUE? (Y/N) --> ");
+                        extend = Convert.ToChar(Console.ReadLine());
+
+                        if (extend == 'y' || extend == 'Y')
+                            done = false;
+                        else
+                            done = true;
+                    }
+                    catch(Exception ex)
+                    {
+                        done = true;
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("\n\nERROR REMOVING EDGE\n\n");
+                }
+               
             }
-
         }// END OF REMOVE EDGE
 
     }
