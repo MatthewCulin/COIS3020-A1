@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\culin\\source\\repos\\COIS 3020\\Culin-A1\\Culin-A1.csproj",
+      "projectUniqueName": "C:\\Users\\culin\\Desktop\\GitHub Repositories\\COIS 3020\\COIS3020-A1\\Culin-A1.csproj",
       "projectName": "Culin-A1",
-      "projectPath": "C:\\Users\\culin\\source\\repos\\COIS 3020\\Culin-A1\\Culin-A1.csproj",
+      "projectPath": "C:\\Users\\culin\\Desktop\\GitHub Repositories\\COIS 3020\\COIS3020-A1\\Culin-A1.csproj",
       "packagesPath": "C:\\Users\\culin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\culin\\source\\repos\\COIS 3020\\Culin-A1\\obj\\",
+      "outputPath": "C:\\Users\\culin\\Desktop\\GitHub Repositories\\COIS 3020\\COIS3020-A1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"

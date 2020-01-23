@@ -226,6 +226,8 @@ namespace Culin_A1
         {
             int i, j;
 
+            timer = 0;
+
             for (i = 0; i < V.Count; i++)   // SET ALL VERTICIES AS UNVISITED
             { 
                 V[i].Visited = false;
