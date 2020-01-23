@@ -112,27 +112,39 @@ namespace Culin_A1
         public void RemoveVertex(T name)
         {
             int i, j, k;
-            int edgeCount;
+            T dest;
 
             if ((i = FindVertex(name)) > -1)
-            {
-                edgeCount = V[i].E.Count;
-
+            { 
                 for (j = 0; j < V.Count; j++)
                 {
-                    for (k = 0; k < V[j].E.Count; k++)
+                    // IF THE VERTEX INDEX IS THE ONE BEING REMOVED
+                    // GO THROUGH THE EDGES ARRAY AND REMOVE ALL EDGES
+                    // THIS WILL ENSURE THE INDEGREE FOR EACH ADJACENT
+                    // WILL DECREASE
+                    if (V[j].Name.Equals(name))
                     {
-                        if (V[j].E[k].AdjVertex.Name.Equals(name))   // INCIDENT EDGE
+                        for (k = 0; k < V[j].E.Count(); k++)
                         {
-                            V[j].E.RemoveAt(k);
-                            break;                                  // SINCE THERE ARE NO DUPLICATE EDGES
+                            dest = V[j].E[k].AdjVertex.Name;
+                            RemoveEdge(name, dest);
                         }
-                    } 
-                }
+                    }
 
-                for (j = edgeCount - 1; j > 0; j--)
-                {
-                    RemoveEdge(V[i].Name, V[i].E[j].AdjVertex.Name); 
+                    // GO THROUGH THE EDGES ARRAY AND DELETE ALL EDGES
+                    // GOING TO THE VERTEX BEING DELETED
+                    else
+                    {
+                        for (k = 0; k < V[j].E.Count; k++)
+                        {
+                            if (V[j].E[k].AdjVertex.Name.Equals(name))   // INCIDENT EDGE
+                            {
+                                V[j].E.RemoveAt(k);
+                                break;                                  // SINCE THERE ARE NO DUPLICATE EDGES
+                            }
+                        }
+                    }
+                    
                 }
 
                 V.RemoveAt(i);
@@ -289,9 +301,7 @@ namespace Culin_A1
 
             timer++;                            // INCREMENT TIMER (FINSIHING TIME)
             v.Colour = "BLACK";                 // SETS COLOUR OF THE VERTEX TO BLACK ONCE COMPLETED     
-            v.FinishingTime = timer;            // SETS THE FINSIHING TIME
-            
-            //first.Insert(0, v);                 // ADD VERTEX TO THE FRONT OF THE FIRST LIST 
+            v.FinishingTime = timer;            // SETS THE FINSIHING TIME 
 
         }// END OF DEPTH FIRST SEARCH
 

@@ -22,6 +22,14 @@ namespace Culin_A1
 
         public string EdgeType { get; set; }        // EDGE TYPE DETERMINED BY THE DEPTH FIRST SEACRH
 
+        public string EdgeInfo
+        {
+            get
+            {
+                return $"{AdjVertex.Name}, {EdgeType}";
+            }
+        }
+
         /*-------------------------------------------------------
         |
         |       Name: Edge

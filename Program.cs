@@ -25,7 +25,7 @@ namespace Culin_A1
                 Console.WriteLine("\n SELECT A TYPE OF GRAPH...");
                 Console.WriteLine("Locations (String) --> 1");
                 Console.WriteLine("Labels (Letters)   --> 2");
-                Console.Write("Labels (Numbers)   --> 3\n --> ");
+                Console.Write("Labels (Numbers)   --> 3\n\n --> ");
                 graph_type = Convert.ToInt32(Console.ReadLine());
 
                 if (graph_type < 0 || graph_type > 3)
@@ -39,14 +39,15 @@ namespace Culin_A1
                     try
                     {
                         Console.WriteLine("\n SELECT AN OPTION...");
-                        Console.WriteLine("Add Vertex    --> 1");
-                        Console.WriteLine("Remove Vertex --> 2");
-                        Console.WriteLine("Add Edge      --> 3");
-                        Console.WriteLine("Remove Edge   --> 4");
-                        Console.Write("Finish Graph  --> 5\n --> ");
+                        Console.WriteLine("Add Vertex       --> 1");
+                        Console.WriteLine("Remove Vertex    --> 2");
+                        Console.WriteLine("Add Edge         --> 3");
+                        Console.WriteLine("Remove Edge      --> 4");
+                        Console.WriteLine("Print Graph Data --> 5");
+                        Console.Write("Finish Graph     --> 6\n\n --> ");
                         user_choice = Convert.ToInt32(Console.ReadLine());
 
-                        if (user_choice < 0 || user_choice > 5)
+                        if (user_choice < 0 || user_choice > 6)
                         {
                             Console.WriteLine("INVALID OPTION...");
                             return;
@@ -71,6 +72,10 @@ namespace Culin_A1
                                 break;
 
                             case 5:
+                                PrintGraph(graph_type, s, c, i);
+                                break;
+
+                            case 6:
                                 done = true;
                                 break;
                         }
@@ -82,65 +87,7 @@ namespace Culin_A1
 
                 }
 
-                switch (graph_type)
-                {
-                    case 1:
-                        Console.WriteLine("\nDEPTH FIRST SEARCH");
-                        s.DepthFirstSearch();
-                        Console.ReadKey();
-
-                        Console.WriteLine("BREADTH FIRST SEARCH");
-                        s.BreadthFirstSearch();
-                        Console.ReadKey();
-
-                        Console.WriteLine("\nVERTEX INFO");
-                        for (j = 0; j < s.V.Count; j++)
-                        {
-                            Console.WriteLine(s.V[j].VertexInfo);
-                            Console.WriteLine("\tEDGE INFO");
-                            for (k = 0; k < s.V[j].E.Count(); k++)
-                                Console.WriteLine(s.V[j].E[k].EdgeType);
-                        }
-                        break;
-
-                    case 2:
-                        Console.WriteLine("\nDEPTH FIRST SEARCH");
-                        c.DepthFirstSearch();
-                        Console.ReadKey();
-
-                        Console.WriteLine("BREADTH FIRST SEARCH");
-                        c.BreadthFirstSearch();
-                        Console.ReadKey();
-
-                        Console.WriteLine("\nVERTEX INFO");
-                        for (j = 0; j < c.V.Count; j++)
-                        {
-                            Console.WriteLine(c.V[j].VertexInfo);
-                            Console.WriteLine("\tEDGE INFO");
-                            for (k = 0; k < c.V[j].E.Count(); k++)
-                                Console.WriteLine(c.V[j].E[k].EdgeType);
-                        }
-                        break;
-
-                    case 3:
-                        Console.WriteLine("\nDEPTH FIRST SEARCH");
-                        i.DepthFirstSearch();
-                        Console.ReadKey();
-
-                        Console.WriteLine("BREADTH FIRST SEARCH");
-                        i.BreadthFirstSearch();
-                        Console.ReadKey();
-
-                        Console.WriteLine("\nVERTEX INFO");
-                        for (j = 0; j < i.V.Count; j++)
-                        {
-                            Console.WriteLine(i.V[j].VertexInfo);
-                            Console.WriteLine("\tEDGE INFO");
-                            for (k = 0; k < i.V[j].E.Count(); j++)
-                                Console.WriteLine(i.V[j].E[k].EdgeType);
-                        }
-                        break;
-                }
+                PrintGraph(graph_type, s, c, i);
             }
             catch(Exception e)
             {
@@ -201,7 +148,7 @@ namespace Culin_A1
 
                         case 3:
                             for (j = 0; j < s_vertex_name.Count(); j++)
-                                i_vertex_name[j] = Convert.ToChar(s_vertex_name[j]);
+                                i_vertex_name[j] = Convert.ToInt32(s_vertex_name[j]);
                             foreach (char element in i_vertex_name)
                                 i.AddVertex(element);
                             break;
@@ -283,7 +230,7 @@ namespace Culin_A1
 
                     try
                     {
-                        Console.Write("\n CONTINUE? (Y/N) -->");
+                        Console.Write("\n CONTINUE? (Y/N) --> ");
                         extend = Convert.ToChar(Console.ReadLine());
                         if (extend == 'y' || extend == 'Y')
                             done = false;
@@ -449,6 +396,85 @@ namespace Culin_A1
                
             }
         }// END OF REMOVE EDGE
+
+
+        /*-------------------------------------------------------
+        |
+        |       Name: Print Graph
+        |
+        |       Purpose: Print the graph information
+        |
+        |       Parameters: - int graph_type
+        |                   - DirectedGraph(s)
+        |                       - string
+        |                       - char
+        |                       - int
+        |
+        --------------------------------------------------------*/
+        static void PrintGraph(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
+        {
+            int j, k;
+
+            switch (graph_type)
+            {
+                // PRINT THE STRING GRAPH
+                case 1:
+                    Console.WriteLine("\nDEPTH FIRST SEARCH");
+                    s.DepthFirstSearch();
+                    Console.ReadKey();
+
+                    Console.WriteLine("BREADTH FIRST SEARCH");
+                    s.BreadthFirstSearch();
+                    Console.ReadKey();
+
+                    Console.WriteLine("\nGRAPH INFO");
+                    for (j = 0; j < s.V.Count; j++)
+                    {
+                        Console.WriteLine("\nVERTEX " + s.V[j].Name + " INFO\n\t" + s.V[j].VertexInfo);
+                        for (k = 0; k < s.V[j].E.Count(); k++)
+                            Console.WriteLine("\n\t\t Branch from {0} -> {1}", s.V[j].Name, s.V[j].E[k].EdgeInfo);
+                    }
+                    break;
+
+                // PRINT THE CHARACTER GRAPH
+                case 2:
+                    Console.WriteLine("\nDEPTH FIRST SEARCH");
+                    c.DepthFirstSearch();
+                    Console.ReadKey();
+
+                    Console.WriteLine("BREADTH FIRST SEARCH");
+                    c.BreadthFirstSearch();
+                    Console.ReadKey();
+
+                    Console.WriteLine("\nGRAPH INFO");
+                    for (j = 0; j < c.V.Count; j++)
+                    {
+                        Console.WriteLine("\nVERTEX " + c.V[j].Name + " INFO\n\t" + c.V[j].VertexInfo);
+                        for (k = 0; k < c.V[j].E.Count(); k++)
+                            Console.WriteLine("\n\t\t Branch from {0} -> {1}", c.V[j].Name, c.V[j].E[k].EdgeInfo);
+                    }
+                    break;
+
+                //PRIN THE INTEGER GRAPH
+                case 3:
+                    Console.WriteLine("\nDEPTH FIRST SEARCH");
+                    i.DepthFirstSearch();
+                    Console.ReadKey();
+
+                    Console.WriteLine("BREADTH FIRST SEARCH");
+                    i.BreadthFirstSearch();
+                    Console.ReadKey();
+
+                    Console.WriteLine("\nGRAPH INFO");
+                    for (j = 0; j < i.V.Count; j++)
+                    {
+                        Console.WriteLine("\nVERTEX " + i.V[j].Name + " INFO\n\t" + i.V[j].VertexInfo);
+                        for (k = 0; k < i.V[j].E.Count(); k++)
+                            Console.WriteLine("\n\t\t Branch from {0} -> {1}", i.V[j].Name, i.V[j].E[k].EdgeInfo);
+                    }
+                    break;
+            }
+        }// END OF PRINT GRAPH
 
     }
 }
