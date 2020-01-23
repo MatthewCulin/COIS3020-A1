@@ -44,10 +44,11 @@ namespace Culin_A1
                         Console.WriteLine("Add Edge         --> 3");
                         Console.WriteLine("Remove Edge      --> 4");
                         Console.WriteLine("Print Graph Data --> 5");
-                        Console.Write("Finish Graph     --> 6\n\n --> ");
+                        Console.WriteLine("Topological Sort --> 6");
+                        Console.Write("Finish Graph     --> 7\n\n --> ");
                         user_choice = Convert.ToInt32(Console.ReadLine());
 
-                        if (user_choice < 0 || user_choice > 6)
+                        if (user_choice < 0 || user_choice > 7)
                         {
                             Console.WriteLine("INVALID OPTION...");
                             return;
@@ -76,6 +77,10 @@ namespace Culin_A1
                                 break;
 
                             case 6:
+                                TopologicalSort(graph_type, s, c, i);
+                                break;
+
+                            case 7:
                                 done = true;
                                 break;
                         }
@@ -472,6 +477,53 @@ namespace Culin_A1
                         for (k = 0; k < i.V[j].E.Count(); k++)
                             Console.WriteLine("\n\t\t Branch from {0} -> {1}", i.V[j].Name, i.V[j].E[k].EdgeInfo);
                     }
+                    break;
+            }
+        }// END OF PRINT GRAPH
+
+        /*-------------------------------------------------------
+        |
+        |       Name: Topological Sort
+        |
+        |       Purpose: Sort graph topologically if it is 
+        |                acyclic
+        |
+        |       Parameters: - int graph_type
+        |                   - DirectedGraph(s)
+        |                       - string
+        |                       - char
+        |                       - int
+        |
+        --------------------------------------------------------*/
+        static void TopologicalSort(int graph_type, DirectedGraph<string> s, DirectedGraph<char> c, DirectedGraph<int> i)
+        {
+            switch (graph_type)
+            {
+                // PRINT THE STRING GRAPH
+                case 1:
+                    if (s.SortTopological() < 0)
+                        Console.WriteLine("\nGRAPH CANNOT BE SORTED TOPOLOGICALLY... NOT ACYCLIC");
+                    else
+                        Console.WriteLine("\nGRAPH SORTED TOPOLOGICALLY");
+                    Console.ReadKey();
+                    break;
+
+                // PRINT THE CHARACTER GRAPH
+                case 2:
+                    if (c.SortTopological() < 0)
+                        Console.WriteLine("\nGRAPH CANNOT BE SORTED TOPOLOGICALLY... NOT ACYCLIC");
+                    else
+                        Console.WriteLine("\nGRAPH SORTED TOPOLOGICALLY");
+                    Console.ReadKey();
+                    break;
+
+                //PRIN THE INTEGER GRAPH
+                case 3:
+                    if (i.SortTopological() < 0)
+                        Console.WriteLine("\nGRAPH CANNOT BE SORTED TOPOLOGICALLY... NOT ACYCLIC");
+                    else
+                        Console.WriteLine("\nGRAPH SORTED TOPOLOGICALLY");
+                    Console.ReadKey();
                     break;
             }
         }// END OF PRINT GRAPH

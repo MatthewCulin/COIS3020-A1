@@ -35,11 +35,14 @@ namespace Culin_A1
     class DirectedGraph<T> : IDirectedGraph<T>
     {
         public List<Vertex<T>> V;
-        public List<Vertex<T>> first;
-        public List<Vertex<T>> second;
+        List<Vertex<T>> first;      // USED FOR FIRST METHOD OF TOPOLOGICAL SORT
+        
+        List<Vertex<T>> vertex_copy;
+        List<Edge<T>> edge_copy;
 
-        int timer = 0;          // INITIALIZES THE TIMER
-        bool cycle = false;     // SET CYCLE TO FALSE; TRUE IF THERE IS A CYCLE IN THE GRAPH
+        int timer = 0;              // INITIALIZES THE TIMER
+        bool cycle = false;         // SET CYCLE TO FALSE; TRUE IF THERE IS A CYCLE IN THE GRAPH
+
 
         /*-------------------------------------------------------
         |
@@ -53,6 +56,8 @@ namespace Culin_A1
         public DirectedGraph()
         {
             V = new List<Vertex<T>>();
+            first = new List<Vertex<T>>();
+            vertex_copy = V;
         }// END OF DIRECTED GRAPH CONSTRUCTOR
 
 
@@ -302,7 +307,7 @@ namespace Culin_A1
             timer++;                            // INCREMENT TIMER (FINSIHING TIME)
             v.Colour = "BLACK";                 // SETS COLOUR OF THE VERTEX TO BLACK ONCE COMPLETED     
             v.FinishingTime = timer;            // SETS THE FINSIHING TIME 
-
+              
         }// END OF DEPTH FIRST SEARCH
 
 
@@ -419,25 +424,41 @@ namespace Culin_A1
 
         /*-------------------------------------------------------
         |
-        |       Name: PrintTopological
+        |       Name: SortTopological
         |
         |       Purpose: Prints the graph in topological order
         |
         |       Parameters: 
         |
         --------------------------------------------------------*/
-        public void PrintTopological()
+        public int SortTopological()
         {
             int i;
-            for (i = 0; i < first.Count; i++)
-                Console.WriteLine("Method 1: " + first[i]);
 
-            Console.WriteLine();
+            // MAKE SURE GRAPH IS ACYCLICAL
+            // ALSO SORTS USING THE FIRST METHOD
+            DepthFirstSearch();
 
-            for (i = 0; i < second.Count; i++)
-                Console.WriteLine("Method 2: " + second[i]);
+            // GRAPH IS ACYCLIC
+            if (!cycle)
+            {
+                // SORTED USING THE FIRST METHOD
+                for (i = 0; i < first.Count; i++)
+                    Console.WriteLine("Method 1: " + first[i].Name);
+                Console.WriteLine();
 
-            Console.ReadLine();
+                // SORTED USING THE SECOND METHOD
+                for (i = 0; i < vertex_copy.Count; i++)
+                    Console.WriteLine("Method 2: " + vertex_copy[i].Name);
+                Console.ReadLine();
+                
+                return (1);
+            }
+
+            // GRAPH IS NOT ACYCLIC
+            else
+                return (-1);
+
         }// END OF PRINT EDGES
 
     }// END OF DIRECTED GRAPH <T> CLASS
