@@ -35,10 +35,6 @@ namespace Culin_A1
     class DirectedGraph<T> : IDirectedGraph<T>
     {
         public List<Vertex<T>> V;
-        List<Vertex<T>> first;      // USED FOR FIRST METHOD OF TOPOLOGICAL SORT
-        
-        List<Vertex<T>> vertex_copy;
-        List<Edge<T>> edge_copy;
 
         int timer = 0;              // INITIALIZES THE TIMER
         bool cycle = false;         // SET CYCLE TO FALSE; TRUE IF THERE IS A CYCLE IN THE GRAPH
@@ -56,8 +52,6 @@ namespace Culin_A1
         public DirectedGraph()
         {
             V = new List<Vertex<T>>();
-            first = new List<Vertex<T>>();
-            vertex_copy = V;
         }// END OF DIRECTED GRAPH CONSTRUCTOR
 
 
@@ -224,7 +218,7 @@ namespace Culin_A1
         --------------------------------------------------------*/
         public void DepthFirstSearch()
         {
-            int i, j;
+            int i;
 
             timer = 0;
 
@@ -435,23 +429,20 @@ namespace Culin_A1
         --------------------------------------------------------*/
         public int SortTopological()
         {
-            int i;
-
             // MAKE SURE GRAPH IS ACYCLICAL
             // ALSO SORTS USING THE FIRST METHOD
             DepthFirstSearch();
+
 
             // GRAPH IS ACYCLIC
             if (!cycle)
             {
                 // SORTED USING THE FIRST METHOD
-                for (i = 0; i < first.Count; i++)
-                    Console.WriteLine("Method 1: " + first[i].Name);
-                Console.WriteLine();
+                // PRINT
+                Console.ReadLine();
 
                 // SORTED USING THE SECOND METHOD
-                for (i = 0; i < vertex_copy.Count; i++)
-                    Console.WriteLine("Method 2: " + vertex_copy[i].Name);
+                // PRINT
                 Console.ReadLine();
                 
                 return (1);
