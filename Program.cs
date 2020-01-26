@@ -95,7 +95,7 @@ namespace Culin_A1
         |   BE USED                                                 |
         |                                                           |
         -----------------------------------------------------------*/
-        static void Main(string[] args)
+        static void Main()
         {
             Program p = new Program();
             p.PromptUser();
@@ -109,10 +109,10 @@ namespace Culin_A1
             try
             {
                 // DETERMINE THE TYPE OF GRAPH LABELLING TO USE
-                Console.WriteLine("\n SELECT A TYPE OF GRAPH...");
-                Console.WriteLine("Locations (String) --> 1");
-                Console.WriteLine("Labels (Letters)   --> 2");
-                Console.Write("Labels (Numbers)   --> 3\n\n --> ");
+                Console.WriteLine("\n..........SELECT A TYPE OF GRAPH..........");
+                Console.WriteLine("Strings   --> 1");
+                Console.WriteLine("Letters   --> 2");
+                Console.Write("Numbers   --> 3\n\n --> ");
                 graph_type = Convert.ToInt32(Console.ReadLine());
 
                 // ENSURE VALID INPUT
@@ -128,7 +128,7 @@ namespace Culin_A1
                     try
                     {
                         // OPTIONS LIST FOR GRAPH MODIFICATION
-                        Console.WriteLine("\n SELECT AN OPTION...");
+                        Console.WriteLine("\n.....SELECT AN OPTION.....");
                         Console.WriteLine("Add Vertex       --> 1");
                         Console.WriteLine("Remove Vertex    --> 2");
                         Console.WriteLine("Add Edge         --> 3");
@@ -190,7 +190,7 @@ namespace Culin_A1
             }
             catch(Exception)
             {
-                Console.WriteLine("\n\nERROR PROCESSING SELECTION\n\n");
+                Console.WriteLine("\n\nERROR PROCESSING GRAPH TYPE\n\n");
             }
         }// END OF PROMPT USER
 
@@ -620,7 +620,7 @@ namespace Culin_A1
                     Console.ReadKey();
                     break;
             }
-        }// END OF PRINT GRAPH
+        }// END OF TOPOLOGICAL SORT
 
     }// END OF PROGRAM CLASS
 

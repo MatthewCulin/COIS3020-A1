@@ -218,7 +218,7 @@ namespace Culin_A1
         --------------------------------------------------------*/
         public void DepthFirstSearch()
         {
-            int i;
+            int i, j;
 
             timer = 0;
 
@@ -229,10 +229,26 @@ namespace Culin_A1
 
             for (i = 0; i < V.Count; i++)
             {
-                if (!V[i].Visited)          // RESET WITH VERTEX I
+                for(j = 0; j < V.Count; j++)
                 {
-                    DepthFirstSearch(V[i]);
-                    Console.WriteLine();
+                    // START DEPTH FIRST WITH 
+                    if (V[j].InDegree.Equals(0))
+                    {
+                        if (!V[j].Visited)          // RESET WITH VERTEX I
+                        {
+                            DepthFirstSearch(V[j]);
+                            Console.WriteLine();
+                        }
+                    }
+
+                    else if(j.Equals(V.Count() - 1))
+                    {
+                        if (!V[j].Visited)          // RESET WITH VERTEX I
+                        {
+                            DepthFirstSearch(V[j]);
+                            Console.WriteLine();
+                        }
+                    }
                 }
             }
         }// END OF DEPTH FIRST SEARCH
@@ -319,17 +335,33 @@ namespace Culin_A1
         --------------------------------------------------------*/
         public void BreadthFirstSearch()
         {
-            int i;
+            int i, j;
 
             for (i = 0; i < V.Count; i++)
                 V[i].Visited = false;              // SET ALL VERTICIES TO UNVISISTED
 
             for (i = 0; i < V.Count; i++)
             {
-                if (!V[i].Visited)                  // RESTART WITH VERTEX I
+                for (j = 0; j < V.Count; j++)
                 {
-                    BreadthFirstSearch(V[i]);
-                    Console.WriteLine();
+                    // START DEPTH FIRST WITH 
+                    if (V[j].InDegree.Equals(0))
+                    {
+                        if (!V[j].Visited)          // RESET WITH VERTEX I
+                        {
+                            BreadthFirstSearch(V[j]);
+                            Console.WriteLine();
+                        }
+                    }
+
+                    else if (j.Equals(V.Count() - 1))
+                    {
+                        if (!V[j].Visited)          // RESET WITH VERTEX I
+                        {
+                            BreadthFirstSearch(V[j]);
+                            Console.WriteLine();
+                        }
+                    }
                 }
             }
                 
@@ -430,19 +462,20 @@ namespace Culin_A1
         public int SortTopological()
         {
             // MAKE SURE GRAPH IS ACYCLICAL
-            // ALSO SORTS USING THE FIRST METHOD
             DepthFirstSearch();
-
 
             // GRAPH IS ACYCLIC
             if (!cycle)
             {
                 // SORTED USING THE FIRST METHOD
-                // PRINT
+                Console.WriteLine("\n\tTOPOLOGICAL SORTING (METHOD 1)->");
+                // ONCE VERTEX BLACK; ADD TO FRONT OF LIST
+                
                 Console.ReadLine();
 
                 // SORTED USING THE SECOND METHOD
-                // PRINT
+                Console.WriteLine("\n\tTOPOLOGICAL SORTING (METHOD 2)->");
+                InDegreeTopological();
                 Console.ReadLine();
                 
                 return (1);
@@ -452,7 +485,134 @@ namespace Culin_A1
             else
                 return (-1);
 
-        }// END OF PRINT EDGES
+        }// END OF SORT TOPOLOGICAL
+
+
+        /*-------------------------------------------------------
+        |
+        |       Name: InDegreeTopological
+        |
+        |       Purpose: Delete vertices once in degree reaches 0
+        |
+        |       Parameters: 
+        |
+        --------------------------------------------------------*/
+        private void InDegreeTopological()
+        {
+            int i, j;
+
+            List<Vertex<T>> inDegreeSort = new List<Vertex<T>>();
+
+            // COPY USER GENERATED LIST INTO NEW LIST TO BE SORTED
+            inDegreeSort = V;
+            
+            // RECURSIVELY SORT ARRAY 
+            // (ONLY IF A ZERO IS NOT ALREADY IN THE FIRST POSITION)
+            while(inDegreeSort.Count() > 0)
+            {
+                SortByInDegree(inDegreeSort);
+
+                // REMOVE THE FIRST VERTEX IN THE ARRAY
+                // WILL ALSO DECREASE IN DEGREE OF ALL
+                // ADJACENT VERTICES
+                Console.WriteLine("\n {0}", inDegreeSort[0].Name);
+
+                // DECREASE IN DEGREE COUNTER FOR EACH ADJACENT VERTEX
+                for(i = 0; i < inDegreeSort[0].E.Count(); i++)
+                {
+                    for (j = 0; j < inDegreeSort.Count(); j++)
+                    {
+                        if (inDegreeSort[j].Name.Equals(inDegreeSort[0].E[i].AdjVertex.Name))
+                            inDegreeSort[j].InDegree--;
+                    }
+                }
+
+                // REMOVE FIRST 
+                inDegreeSort.RemoveAt(0);
+
+            }
+
+        }// END OF IN DEGREE TOPOLOGICAL SORT
+
+
+        /*-------------------------------------------------------
+        |
+        |       Name: SortByInDegree
+        |
+        |       Purpose: Sort a list of vertices by its
+        |                in degree and return if there is a
+        |                vertex with an in degree of 0 in the
+        |                first position
+        |
+        |       Parameters: - List<Vertex<T>> sort
+        |
+        --------------------------------------------------------*/
+        private List<Vertex<T>> SortByInDegree(List<Vertex<T>> sort)
+        {
+            int i, j, k;
+            int zeroLoc;
+
+            Vertex<T> temp;
+
+            // WORST CASE MOVES END ELEMENT TO FRONT (N - 1 ITERATIONS)
+            for (i = 1; i < sort.Count(); i++)
+            {
+                for(j = 0; j < sort.Count(); j++)
+                {
+                    for(k = j + 1; k < sort.Count(); k++)
+                    {
+                        // INDEX K HAS IN DEGREE = 0
+                        if (sort[k].InDegree.Equals(0))
+                        {
+                            // SWAP POSITIONS
+                            // RETURN IF IN DEGREE OF 0 IN FIRST POS
+                            zeroLoc = j;
+
+                            // SWAP POSITIONS
+                            temp = sort[j];
+                            sort[j] = sort[k];
+                            sort[k] = temp;
+
+                            if (zeroLoc.Equals(0))
+                                return sort;
+
+                            else
+                                break;
+                            
+                        }
+
+                        // J->IN DEGREE > K->IN DEGREE && J->EDGE COUNT < K->EDGE COUNT; SWAP
+                        else if((sort[j].InDegree > sort[k].InDegree) && (sort[j].E.Count() < sort[k].E.Count()))
+                        {
+                            // SWAP POSITIONS
+                            temp = sort[j];
+                            sort[j] = sort[k];
+                            sort[k] = temp;
+
+                            break;
+                        }
+                        
+                        // J->EDGE COUNT < K->EDGE COUNT; SWAP
+                        else if (sort[j].E.Count() < sort[k].E.Count())
+                        {
+                            // SWAP POSITIONS
+                            temp = sort[j];
+                            sort[j] = sort[k];
+                            sort[k] = temp;
+
+                            break;
+                        }
+
+                        break;
+
+                    }// END OF FOR K
+                }// END OF FOR J
+            }// END OF FOR I
+            
+            return sort;
+        }// END OF SORT BY IN DEGREE
+
 
     }// END OF DIRECTED GRAPH <T> CLASS
+
 }
