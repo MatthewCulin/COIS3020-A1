@@ -24,7 +24,7 @@ using System.Threading.Tasks;
         |   DepthFirstSearch(v)                                                             |
         |       - Updates vertex colour based on the traversal                              |
         |         (set to white in Vertex class)                                            |
-        |       - Sets discovery time and finsihing time based of timer incrementor         |
+        |       - Sets discovery time and finishing time based of timer incrementor         |
         |       - Updates branch type based on traversal                                    |
         |         (Sets cycle boolean to true if there is a back edge)                      |
         |                                                                                   |
@@ -504,8 +504,9 @@ namespace Culin_A1
             List<Vertex<T>> inDegreeSort = new List<Vertex<T>>();
 
             // COPY USER GENERATED LIST INTO NEW LIST TO BE SORTED
-            inDegreeSort = V;
-            
+            foreach (Vertex<T> element in V)
+                inDegreeSort.Add(element);
+
             // RECURSIVELY SORT ARRAY 
             // (ONLY IF A ZERO IS NOT ALREADY IN THE FIRST POSITION)
             while(inDegreeSort.Count() > 0)

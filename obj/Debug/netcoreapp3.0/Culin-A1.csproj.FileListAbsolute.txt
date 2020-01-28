@@ -9,3 +9,14 @@ C:\Users\culin\source\repos\COIS 3020\Culin-A1\obj\Debug\netcoreapp3.0\Culin-A1.
 C:\Users\culin\source\repos\COIS 3020\Culin-A1\obj\Debug\netcoreapp3.0\Culin-A1.dll
 C:\Users\culin\source\repos\COIS 3020\Culin-A1\obj\Debug\netcoreapp3.0\Culin-A1.pdb
 C:\Users\culin\source\repos\COIS 3020\Culin-A1\obj\Debug\netcoreapp3.0\Culin-A1.csprojAssemblyReference.cache
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\bin\Debug\netcoreapp3.0\Culin-A1.exe
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\bin\Debug\netcoreapp3.0\Culin-A1.deps.json
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\bin\Debug\netcoreapp3.0\Culin-A1.runtimeconfig.json
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\bin\Debug\netcoreapp3.0\Culin-A1.runtimeconfig.dev.json
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\bin\Debug\netcoreapp3.0\Culin-A1.dll
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\bin\Debug\netcoreapp3.0\Culin-A1.pdb
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\obj\Debug\netcoreapp3.0\Culin-A1.csprojAssemblyReference.cache
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\obj\Debug\netcoreapp3.0\Culin-A1.AssemblyInfoInputs.cache
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\obj\Debug\netcoreapp3.0\Culin-A1.AssemblyInfo.cs
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\obj\Debug\netcoreapp3.0\Culin-A1.dll
+C:\Users\culin\Desktop\GitHub Repositories\COIS 3020\COIS3020-A1\obj\Debug\netcoreapp3.0\Culin-A1.pdb
