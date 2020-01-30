@@ -119,7 +119,7 @@ namespace Culin_A1
                 {
                     // IF THE VERTEX INDEX IS THE ONE BEING REMOVED
                     // GO THROUGH THE EDGES ARRAY AND REMOVE ALL EDGES
-                    // THIS WILL ENSURE THE INDEGREE FOR EACH ADJACENT
+                    // THIS WILL ENSURE THE IN DEGREE FOR EACH ADJACENT
                     // WILL DECREASE
                     if (V[j].Name.Equals(name))
                     {
@@ -155,7 +155,7 @@ namespace Culin_A1
         |
         |       Name: AddEdge
         |
-        |       Purpose: Adds an edge from two verticies 
+        |       Purpose: Adds an edge from two vertices 
         |                (name1 -> name2) and associates a cost
         |
         |       Parameters: - T name1
@@ -185,7 +185,7 @@ namespace Culin_A1
         |
         |       Name: RemoveEdge
         |
-        |       Purpose: Removes the edge between two verticies
+        |       Purpose: Removes the edge between two vertices
         |                (name1 -> name2) from the graph
         |
         |       Parameters: - T name1
@@ -222,35 +222,36 @@ namespace Culin_A1
 
             timer = 0;
 
-            for (i = 0; i < V.Count; i++)   // SET ALL VERTICIES AS UNVISITED
+            for (i = 0; i < V.Count; i++)   // SET ALL VERTICES AS UNVISITED
             { 
-                V[i].Visited = false;
+                V[i].Visited = false;       
+                V[i].Colour = "WHITE";
             }
 
             for (i = 0; i < V.Count; i++)
             {
                 for(j = 0; j < V.Count; j++)
                 {
-                    // START DEPTH FIRST WITH 
-                    if (V[j].InDegree.Equals(0))
+                    // START DEPTH FIRST WITH A VERTEX 
+                    // WITH AN IN DEGREE OF 0 IF POSSIBLE
+                    if (V[j].InDegree.Equals(0) && !V[j].Visited)
                     {
-                        if (!V[j].Visited)          // RESET WITH VERTEX I
-                        {
-                            DepthFirstSearch(V[j]);
-                            Console.WriteLine();
-                        }
+                        DepthFirstSearch(V[j]);
+                        Console.WriteLine();
                     }
+
 
                     else if(j.Equals(V.Count() - 1))
                     {
-                        if (!V[j].Visited)          // RESET WITH VERTEX I
+                        if (!V[0].Visited)          // RESET WITH VERTEX I
                         {
-                            DepthFirstSearch(V[j]);
+                            DepthFirstSearch(V[0]);
                             Console.WriteLine();
                         }
                     }
                 }
             }
+
         }// END OF DEPTH FIRST SEARCH
 
 
@@ -316,10 +317,10 @@ namespace Culin_A1
 
             }
 
-            timer++;                            // INCREMENT TIMER (FINSIHING TIME)
+            timer++;                            // INCREMENT TIMER (FINISHING TIME)
             v.Colour = "BLACK";                 // SETS COLOUR OF THE VERTEX TO BLACK ONCE COMPLETED     
-            v.FinishingTime = timer;            // SETS THE FINSIHING TIME 
-              
+            v.FinishingTime = timer;            // SETS THE FINISHING TIME 
+
         }// END OF DEPTH FIRST SEARCH
 
 
@@ -338,7 +339,7 @@ namespace Culin_A1
             int i, j;
 
             for (i = 0; i < V.Count; i++)
-                V[i].Visited = false;              // SET ALL VERTICIES TO UNVISISTED
+                V[i].Visited = false;              // SET ALL VERTICES TO UNVISiTED
 
             for (i = 0; i < V.Count; i++)
             {
@@ -392,12 +393,12 @@ namespace Culin_A1
                 v = Q.Dequeue();                            // OUTPUT VERTEX WHEN REMOVED FROM THE QUEUE
                 Console.WriteLine(v.Name);
 
-                for (j = 0; j < v.E.Count; j++)             // ENQUEUE UNIVISITED ADJACENT VERTICIES
+                for (j = 0; j < v.E.Count; j++)             // ENQUEUE UNIVISITED ADJACENT VERTICES
                 {
                     w = v.E[j].AdjVertex;
                     if (!w.Visited)
                     {
-                        w.Visited = true;                   // MARK VERTEX AS VISISTED
+                        w.Visited = true;                   // MARK VERTEX AS VISITED
                         Q.Enqueue(w);
                     }
                 }
@@ -407,9 +408,9 @@ namespace Culin_A1
 
         /*-------------------------------------------------------
         |
-        |       Name: PrintVerticies
+        |       Name: PrintVertices
         |
-        |       Purpose: Prints out all verticies of a graph
+        |       Purpose: Prints out all vertices of a graph
         |
         |       Parameters: 
         |
@@ -422,7 +423,7 @@ namespace Culin_A1
             }
 
             Console.ReadLine();
-        }// END OF PRINT VERTICIES
+        }// END OF PRINT VERTICES
 
         
         /*-------------------------------------------------------
@@ -469,7 +470,7 @@ namespace Culin_A1
             {
                 // SORTED USING THE FIRST METHOD
                 Console.WriteLine("\n\tTOPOLOGICAL SORTING (METHOD 1)->");
-                // ONCE VERTEX BLACK; ADD TO FRONT OF LIST
+                // PRINT THE ORDER THE VERTICES FINSHED FROM MOST RECENT TO OLDEST
                 
                 Console.ReadLine();
 
@@ -560,10 +561,14 @@ namespace Culin_A1
             {
                 for(j = 0; j < sort.Count(); j++)
                 {
-                    for(k = j + 1; k < sort.Count(); k++)
+                    for(k = j + 1; k < sort.Count();)
                     {
+                        // FIRST INDEX HAS IN DEGREE = 0
+                        if (sort[0].InDegree.Equals(0))
+                            return sort;
+
                         // INDEX K HAS IN DEGREE = 0
-                        if (sort[k].InDegree.Equals(0))
+                        else if (sort[k].InDegree.Equals(0))
                         {
                             // SWAP POSITIONS
                             // RETURN IF IN DEGREE OF 0 IN FIRST POS
