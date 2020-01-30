@@ -222,10 +222,16 @@ namespace Culin_A1
 
             timer = 0;
 
-            for (i = 0; i < V.Count; i++)   // SET ALL VERTICES AS UNVISITED
+            // RESET ALL STATS FOR EACH VERTEX
+            foreach (Vertex<T> vertex in V)
             { 
-                V[i].Visited = false;       
-                V[i].Colour = "WHITE";
+                vertex.Visited = false;       
+                vertex.Colour = "WHITE";
+                vertex.DiscoveryTime = 0;
+                vertex.FinishingTime = 0;
+
+                foreach (Edge<T> edge in vertex.E)
+                    edge.EdgeType = "";
             }
 
             for (i = 0; i < V.Count; i++)
@@ -243,7 +249,7 @@ namespace Culin_A1
 
                     else if(j.Equals(V.Count() - 1))
                     {
-                        if (!V[0].Visited)          // RESET WITH VERTEX I
+                        if (!V[j].Visited)          // RESET WITH VERTEX J
                         {
                             DepthFirstSearch(V[0]);
                             Console.WriteLine();
@@ -468,6 +474,13 @@ namespace Culin_A1
             // GRAPH IS ACYCLIC
             if (!cycle)
             {
+                List<Vertex<T>> inDegreeSort = new List<Vertex<T>>();
+                List<Edge<T>> edgecopy = new List<Edge<T>>();
+
+                // COPY USER GENERATED LIST INTO NEW LIST TO BE SORTED
+                foreach (Vertex<T> vertex in V)
+                    inDegreeSort.Add(vertex);
+
                 // SORTED USING THE FIRST METHOD
                 Console.WriteLine("\n\tTOPOLOGICAL SORTING (METHOD 1)->");
                 // PRINT THE ORDER THE VERTICES FINSHED FROM MOST RECENT TO OLDEST
@@ -476,7 +489,7 @@ namespace Culin_A1
 
                 // SORTED USING THE SECOND METHOD
                 Console.WriteLine("\n\tTOPOLOGICAL SORTING (METHOD 2)->");
-                InDegreeTopological();
+                InDegreeTopological(inDegreeSort);
                 Console.ReadLine();
                 
                 return (1);
@@ -498,15 +511,9 @@ namespace Culin_A1
         |       Parameters: 
         |
         --------------------------------------------------------*/
-        private void InDegreeTopological()
+        private void InDegreeTopological(List<Vertex<T>> inDegreeSort)
         {
             int i, j;
-
-            List<Vertex<T>> inDegreeSort = new List<Vertex<T>>();
-
-            // COPY USER GENERATED LIST INTO NEW LIST TO BE SORTED
-            foreach (Vertex<T> element in V)
-                inDegreeSort.Add(element);
 
             // RECURSIVELY SORT ARRAY 
             // (ONLY IF A ZERO IS NOT ALREADY IN THE FIRST POSITION)
@@ -526,12 +533,13 @@ namespace Culin_A1
                     {
                         if (inDegreeSort[j].Name.Equals(inDegreeSort[0].E[i].AdjVertex.Name))
                             inDegreeSort[j].InDegree--;
+
+                        // FOR SOME REASON IT DECREASED THE V[] IN DEGREES AS WELL
                     }
                 }
 
                 // REMOVE FIRST 
                 inDegreeSort.RemoveAt(0);
-
             }
 
         }// END OF IN DEGREE TOPOLOGICAL SORT
@@ -552,7 +560,7 @@ namespace Culin_A1
         private List<Vertex<T>> SortByInDegree(List<Vertex<T>> sort)
         {
             int i, j, k;
-            int zeroLoc;
+            int zeroLoc = 0;
 
             Vertex<T> temp;
 
@@ -563,6 +571,14 @@ namespace Culin_A1
                 {
                     for(k = j + 1; k < sort.Count();)
                     {
+                        // IF THERE IS A SAVED LOCATION FOR A ZERO IN DEGREE
+                        // JUMP TO ITS LOCATION TO SWAP
+                        if(zeroLoc > 0)
+                        {
+                            j = zeroLoc - 1;
+                            k = zeroLoc;
+                        }
+
                         // FIRST INDEX HAS IN DEGREE = 0
                         if (sort[0].InDegree.Equals(0))
                             return sort;
@@ -583,7 +599,21 @@ namespace Culin_A1
                                 return sort;
 
                             else
-                                break;
+                            {
+                                // IF ON FIRST RECURSIVE SORT 
+                                // SORT REST OF LIST
+                                if (i.Equals(0))
+                                    break;
+
+                                // LIST BEFORE AND AFTER ZEROLOC HAS BEEN SORTED ALREADY
+                                // INCREMENT I; RESTART SORT 
+                                // WILL ASSIGN J TO ZEROLOC-1 AND K TO ZEROLOC UPON RESTART
+                                else
+                                {
+                                    j = sort.Count();
+                                    break;
+                                }
+                            }
                             
                         }
 
