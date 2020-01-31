@@ -474,12 +474,8 @@ namespace Culin_A1
             // GRAPH IS ACYCLIC
             if (!cycle)
             {
+                // CREATES NEW LIST OF VETRICES AND COPY V INTO IT
                 List<Vertex<T>> inDegreeSort = new List<Vertex<T>>(V);
-                List<Edge<T>> edgecopy = new List<Edge<T>>();
-
-                // COPY USER GENERATED LIST INTO NEW LIST TO BE SORTED
-                //foreach (Vertex<T> vertex in V)
-                    //inDegreeSort.Add(vertex);
 
                 // SORTED USING THE FIRST METHOD
                 Console.WriteLine("\n\tTOPOLOGICAL SORTING (METHOD 1)->");
@@ -531,10 +527,9 @@ namespace Culin_A1
                 {
                     for (j = 0; j < inDegreeSort.Count(); j++)
                     {
+                        // DECREASES IN DEGREE OF V LIST AS WELL
                         if (inDegreeSort[j].Name.Equals(inDegreeSort[0].E[i].AdjVertex.Name))
                             inDegreeSort[j].InDegree--;
-
-                        // DECREASING THE V[] IN DEGREES AS WELL
                     }
                 }
 
