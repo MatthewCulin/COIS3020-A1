@@ -474,16 +474,16 @@ namespace Culin_A1
             // GRAPH IS ACYCLIC
             if (!cycle)
             {
-                List<Vertex<T>> inDegreeSort = new List<Vertex<T>>();
+                List<Vertex<T>> inDegreeSort = new List<Vertex<T>>(V);
                 List<Edge<T>> edgecopy = new List<Edge<T>>();
 
                 // COPY USER GENERATED LIST INTO NEW LIST TO BE SORTED
-                foreach (Vertex<T> vertex in V)
-                    inDegreeSort.Add(vertex);
+                //foreach (Vertex<T> vertex in V)
+                    //inDegreeSort.Add(vertex);
 
                 // SORTED USING THE FIRST METHOD
                 Console.WriteLine("\n\tTOPOLOGICAL SORTING (METHOD 1)->");
-                // PRINT THE ORDER THE VERTICES FINSHED FROM MOST RECENT TO OLDEST
+                // PRINT THE ORDER THE VERTICES FINSHED FROM MOST RECENT TO OLDEST  
                 
                 Console.ReadLine();
 
@@ -534,7 +534,7 @@ namespace Culin_A1
                         if (inDegreeSort[j].Name.Equals(inDegreeSort[0].E[i].AdjVertex.Name))
                             inDegreeSort[j].InDegree--;
 
-                        // FOR SOME REASON IT DECREASED THE V[] IN DEGREES AS WELL
+                        // DECREASING THE V[] IN DEGREES AS WELL
                     }
                 }
 
