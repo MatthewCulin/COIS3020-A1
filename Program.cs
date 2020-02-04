@@ -329,7 +329,7 @@ namespace Culin_A1
                             break;
 
                         case 3:
-                            i.AddVertex(Convert.ToInt32(s_vertex_name));
+                            i.RemoveVertex(Convert.ToInt32(s_vertex_name));
                             break;
 
                         default:
@@ -803,7 +803,7 @@ namespace Culin_A1
                     // WILL DECREASE
                     if (V[j].Name.Equals(name))
                     {
-                        for (k = 0; k < V[j].E.Count(); k++)
+                        for (k = 0; k < V[j].E.Count();)
                         {
                             dest = V[j].E[k].AdjVertex.Name;
                             RemoveEdge(name, dest);
