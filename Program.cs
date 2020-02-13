@@ -903,6 +903,7 @@ namespace Culin_A1
             timer = 0;
 
             topSort.Clear();
+            cycle = false;
 
             // RESET ALL STATS FOR EACH VERTEX
             foreach (Vertex<T> vertex in V)
